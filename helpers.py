@@ -1,5 +1,8 @@
 import pickle
 
+with open("data.pickle", "rb") as inp:
+    data = pickle.load(inp)
+
 def create_pickle_jar(): 
     data = {}
     for i in range(2**18):
@@ -38,4 +41,20 @@ def convert_board_to_binary(board):
             if col == 2:
                 black_arr.append(0)
                 white_arr.append(1)
-    return black_arr + white_arr
+    bin_string = ""
+    for i in black_arr:
+        bin_string += str(i)
+    for i in white_arr:
+        bin_string += str(i)
+    return bin_string
+
+def create_test_board():
+    return [
+        [1, 0, 0],
+        [0, 1, 0],
+        [2, 0, 2]
+        ]
+
+def coords_from_board(board):
+    binary = convert_board_to_binary(board)
+    return data[binary]

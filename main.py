@@ -1,5 +1,6 @@
 import pickle
 import helpers
+import copy
 
 """
 Every GO board state will be represented in 3 states:
@@ -15,9 +16,6 @@ Every GO board state will be represented in 3 states:
     (-40, 50)
 """
 
-with open("data.pickle", "rb") as inp:
-    data = pickle.load(inp)
-
 def create_blank_board():
     return [
         [0, 0, 0],
@@ -25,11 +23,19 @@ def create_blank_board():
         [0, 0, 0]
         ]
 
-def create_board():
-    return [
-        [1, 0, 0],
-        [0, 1, 0],
-        [2, 0, 2]
-        ]
-                
-print(helpers.convert_board_to_binary(create_board()))
+board = create_blank_board()
+
+def create_next_boards(board):
+    next_boards = []
+
+    # Given current board, what states could be next?
+    for x, row in enumerate(board):
+        for y, stone in enumerate(row):
+            # 0 empty, 1 black, 2 white
+            if stone == 0:
+                new_board = copy.deepcopy(board)
+                new_board[x][y] = 1
+                next_boards.append(new_board)
+    print(next_boards)
+
+create_next_boards(board)
