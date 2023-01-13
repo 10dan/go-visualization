@@ -24,9 +24,18 @@ def create_pickle_jar():
     with open("data.pickle", "wb") as out:
         pickle.dump(data, out)
 
-# create_pickle_jar()
-
-with open("data.pickle", "rb") as inp:
-    data = pickle.load(inp)
-
-print(data["111111111111101111"])
+def convert_board_to_binary(board):
+    black_arr = []
+    white_arr = []
+    for row in board:
+        for col in row:
+            if col == 0:
+                black_arr.append(0)
+                white_arr.append(0)
+            if col == 1:
+                black_arr.append(1)
+                white_arr.append(0)
+            if col == 2:
+                black_arr.append(0)
+                white_arr.append(1)
+    return black_arr + white_arr
