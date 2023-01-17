@@ -21,12 +21,6 @@ class TreeNode:
         self.data = data
         self.children = []
 
-root = TreeNode([[1, 2], [3, 4]])
-child1 = TreeNode([[5, 6], [7, 8]])
-child2 = TreeNode([[9, 10], [11, 12]])
-root.children.append(child1)
-root.children.append(child2)
-
 def create_blank_board():
     return [
         [0, 0, 0],
@@ -34,19 +28,37 @@ def create_blank_board():
         [0, 0, 0]
         ]
 
-def create_next_boards(board, parent_node):
+def create_next_boards(board, parent_node, player):
+    """
+    board: 2d array, current board state.
+    parent_node: the TreeNode of the parent.
+    players: 1 or 2 for black or white.
+    """
+
     # Given current board, what states could be next?
     for x, row in enumerate(board):
-        for y, stone in enumerate(row):
-            # 0 empty, 1 black, 2 white
-            if stone == 0:
-                new_board = copy.deepcopy(parent_node)
-                new_board[x][y] = whos_turn
-                next_boards.append(new_board)
-    print(next_boards)
-    
-whos_turn = 1
-board = create_blank_board()
+        for y, _ in enumerate(row):
+            if go.is_legal_move(board, x,y,player):
+                new_board = copy.deepcopy(board)
+                new_board[x][y] = player
+                parent_node.children.append(new_board)
+                
+def turn_calc():
+    if player_one_turn:
+        player_one_turn = not player_one_turn
+        return 1
+    else:
+        player_one_turn = not player_one_turn
+        return 2
 
-print(root)
-create_next_boards(board)
+player_one_turn = True
+
+
+
+board = create_blank_board()
+root = TreeNode(board)
+create_next_boards(board, root, turn_calc())
+print(root.children)
+
+for child in root.children:
+    create_next_boards(child, TreeNode(child), turn_calc())
